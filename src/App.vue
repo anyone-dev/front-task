@@ -1,9 +1,15 @@
 <template>
   <div class="max-w-lg mx-auto py-20 custom-el">
-    <div class="flex items-center gap-4">
-      <div class="bg-gray-300 rounded-full w-[80px] h-[80px]"></div>
-      <div>
-        <label for="hours-old" class="font-bold">{{ student.name }} is</label>
+    <div class="flex items-center gap-[16px]">
+      <div class="bg-gray-300 rounded-full w-[80px] h-[80px] overflow-hidden">
+        <img
+          src="@/raoul-droog-yMSecCHsIBc-unsplash.jpg"
+          alt="pic"
+          class="w-full h-full block object-cover"
+        />
+      </div>
+      <div class="flex flex-col gap-[12px]">
+        <label for="hours-old" class="sname" :class="{ 'active': isInputFocused }">{{ student.name }} is</label>
         <div class="flex gap-2 items-baseline">
           <div class="relative">
             <input
@@ -21,10 +27,10 @@
               ref="inputRef"
             />
             <div
-              class="absolute inset-0 pointer-events-none flex items-center justify-start h-[44px] border-purple-500 border-2 rounded-md px-[8px] py-[2px]"
+              class="absolute inset-0 pointer-events-none flex items-center justify-start h-[44px] border-[#CFCADF] border-[1.5px] rounded-md px-[8px] py-[2px]"
               :class="{ 'cursor-active': isInputFocused }"
             >
-              <span class="val whitespace-pre">{{ displayValue }}</span>
+              <span class="val whitespace-pre text-[#CFCADF]" :class="{ 'text-black': isInputFocused }">{{ displayValue }}</span>
               <div
                 v-if="isInputFocused"
                 class="absolute top-2 bottom-2 w-0.5 bg-black cursor-caret"
@@ -155,8 +161,20 @@ watch(displayValue, () => {
 
 <style scoped>
 .custom-el {
-  font-family: sans-serif;
+  font-family: 'Inter', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
   font-size: 18px;
+  line-height: 1;
+}
+.sname {
+  font-family: 'Koulen', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  &.active {
+    color: #906fee;
+  }
 }
 
 input {
@@ -165,6 +183,10 @@ input {
 
 .cursor-caret {
   animation: blink 1s infinite;
+}
+
+.cursor-active {
+  border-color: #906fee;
 }
 
 .invisible {

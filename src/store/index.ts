@@ -19,3 +19,14 @@ export const store = reactive<AppState>({
   ],
   minimumAgeInMonths: 0,
 })
+
+export function updatePersonAge(personId: number, newAgeHours: number) {
+  const person = store.people.find(p => p.id === personId)
+  if (person) {
+    person.ageInHours = newAgeHours
+  }
+}
+
+export function getPersonById(id: number) {
+  return store.people.find((p) => p.id === id)
+}

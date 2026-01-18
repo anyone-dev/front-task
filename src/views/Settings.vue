@@ -1,31 +1,40 @@
 <script setup lang="ts">
-import { store } from '@/store'
+import { store } from "@/store";
+import { ref } from "vue";
+import NumericInput from "@/components/NumericInput.vue";
 
-function updateMinimumAge(value: string) {
-  store.minimumAgeInMonths = Number(value) || 0
+const inputFocused = ref(false);
+
+function updateMinimumAge(value: number) {
+  store.minimumAgeInMonths = value || 0;
 }
 </script>
 
 <template>
   <div class="flex flex-col gap-4">
-    <router-link to="/" class="text-violet-600 hover:underline text-sm">&larr; Back</router-link>
+    <router-link to="/" class="text-dark hover:text-primary-light text-sm">&larr; Back</router-link>
 
-    <h1 class="text-xl font-bold text-gray-700">Settings</h1>
+    <h1 class="text-xl font-bold text-dark">Settings</h1>
 
     <div>
-      <label for="min-age-input" class="block text-sm font-bold tracking-wide text-gray-700">
-        MINIMUM AGE
-      </label>
       <div class="flex items-center gap-2">
-        <input
-          id="min-age-input"
-          type="text"
-          :value="store.minimumAgeInMonths"
-          @input="updateMinimumAge(($event.target as HTMLInputElement).value)"
-          class="border border-gray-300 rounded px-2 py-1 text-lg outline-none"
-          placeholder="0"
+        <NumericInput
+          v-model="store.minimumAgeInMonths"
+          v-model:isFocused="inputFocused"
+          :label="'minimum age'"
+          :label-uppercase="true"
+          label-color="text-dark"
+          active-label-color="text-primary"
+          caption="months"
+          caption-color="text-dark"
+          caret-color="caret-primary"
+          input-color="text-light-grey"
+          hover-input-color="text-mid-grey"
+          active-input-color="text-dark"
+          border-color="border-light-grey"
+          hover-border-color="border-mid-grey"
+          active-border-color="border-primary-light"
         />
-        <span class="text-gray-600">months</span>
       </div>
     </div>
   </div>

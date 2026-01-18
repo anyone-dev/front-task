@@ -35,7 +35,7 @@ export function useNumericInput(props: NumericInputProps, emit: NumericInputEmit
   function onInput(e: Event) {
     enableTransition.value = true;
     const el = e.target as HTMLInputElement;
-    const digits = digitsOnly(el.value);
+    const digits = digitsOnly(el.value).replace(/^0+/, "");
 
     rawValue.value = digits;
     emit("update:modelValue", digits ? Number(digits) : 0);

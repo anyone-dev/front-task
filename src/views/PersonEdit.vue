@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { store } from '@/store'
+import AppInput, { type InputNumberType } from "@/components/AppInputNumber.vue";
 
 const route = useRoute()
 
@@ -10,7 +11,12 @@ const person = computed(() => {
   return store.people.find((p) => p.id === id)
 })
 
-function updateAge(value: string) {
+const label = computed(() => person.value
+  ? person.value.name.toUpperCase() + ' IS'
+  : ''
+)
+
+function updateAge(value: InputNumberType) {
   if (person.value) {
     person.value.ageInHours = Number(value) || 0
   }
@@ -27,22 +33,12 @@ function updateAge(value: string) {
         :alt="person.name"
         class="w-14 h-14 rounded-full border-2 border-violet-500 object-cover"
       />
-      <div>
-        <label for="hours-input" class="block text-sm font-bold tracking-wide text-gray-700">
-          {{ person.name.toUpperCase() }} IS
-        </label>
-        <div class="flex items-center gap-2">
-          <input
-            id="hours-input"
-            type="text"
-            :value="person.ageInHours"
-            @input="updateAge(($event.target as HTMLInputElement).value)"
-            class="border border-gray-300 rounded px-2 py-1 text-lg outline-none"
-            placeholder="0"
-          />
-          <span class="text-gray-600">hours old</span>
-        </div>
-      </div>
+      <AppInput
+        :label="label"
+        caption="hours old"
+        :model-value="person.ageInHours"
+        @update:model-value="updateAge"
+      />
     </div>
   </div>
 

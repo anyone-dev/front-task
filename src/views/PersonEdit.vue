@@ -9,36 +9,32 @@ const person = computed(() => {
   const id = Number(route.params.id)
   return store.people.find((p) => p.id === id)
 })
-
-function updateAge(value: string) {
-  if (person.value) {
-    person.value.ageInHours = Number(value) || 0
-  }
-}
 </script>
 
 <template>
   <div v-if="person" class="flex flex-col gap-4">
     <router-link to="/" class="text-violet-600 hover:underline text-sm">&larr; Back</router-link>
 
-    <div class="flex items-center gap-3">
+    <div class="person flex items-center gap-3">
       <img
-        src="/img.png"
+        src="/photo.jpg"
         :alt="person.name"
-        class="w-14 h-14 rounded-full border-2 border-violet-500 object-cover"
+        class="person__img"
       />
+
       <div>
-        <label for="hours-input" class="block text-sm font-bold tracking-wide text-gray-700">
+        <label for="hours-input" class="person__label">
           {{ person.name.toUpperCase() }} IS
         </label>
+
         <div class="flex items-center gap-2">
           <input
             id="hours-input"
+            v-model="person.ageInHours"
+            v-thousands
+            v-auto-width="{ min: 72, extra: 20 }"
             type="text"
-            :value="person.ageInHours"
-            @input="updateAge(($event.target as HTMLInputElement).value)"
-            class="border border-gray-300 rounded px-2 py-1 text-lg outline-none"
-            placeholder="0"
+            placeholder="7"
           />
           <span class="text-gray-600">hours old</span>
         </div>
@@ -51,3 +47,33 @@ function updateAge(value: string) {
     <router-link to="/" class="text-violet-600 hover:underline text-sm">Back to list</router-link>
   </div>
 </template>
+
+<style>
+.person__img {
+  border: 1px solid transparent;
+  border-radius: 50%;
+  padding: 4px;
+  box-sizing: border-box;
+  background: #ffffff;
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+}
+
+.person__label {
+  display: block;
+  color: var(--dark);
+  margin-bottom: 12px;
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: bold;
+}
+
+.person:focus-within .person__img {
+  border-color: var(--primary);
+}
+
+.person:focus-within .person__label {
+  color: var(--primary);
+}
+</style>

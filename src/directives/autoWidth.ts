@@ -45,15 +45,17 @@ export const vAutoWidth: Directive<HTMLInputElement, Options | number | undefine
     const extra = opts.extra ?? 24
 
     const resize = () => {
-        const text = el.value
-        const contentWidth = getTextWidth(text, el)
-        const next = clamp(Math.ceil(contentWidth + extra), min, max)
-        el.style.width = `${next}px`
-      }
+      const text = el.value
+      const contentWidth = getTextWidth(text, el)
+      const next = clamp(Math.ceil(contentWidth + extra), min, max)
+
+      el.style.width = `${next}px`
+    }
 
     resize()
 
     el.addEventListener('input', resize)
+    ;(el as any).__vAutoWidthResize__ = resize
   },
 
   updated(el) {

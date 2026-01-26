@@ -11,7 +11,7 @@ const props = withDefaults(
   {
     placeholder: '7',
     minWidth: 72,
-    extraWidth: 20,
+    extraWidth: 28,
   },
 )
 
@@ -40,3 +40,9 @@ const inputValue = computed({
     :placeholder="placeholder"
   />
 </template>
+
+<style scoped>
+input {
+  font-weight: 500;
+}
+</style>

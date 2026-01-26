@@ -23,7 +23,7 @@ const upperName = computed(() => props.name.toUpperCase())
         {{ upperName }} IS
       </label>
 
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-3">
         <NumericInput
           id="hours-input"
           :model-value="modelValue"
@@ -36,6 +36,12 @@ const upperName = computed(() => props.name.toUpperCase())
 </template>
 
 <style scoped>
+.person {
+  font-family: "Inter", sans-serif;
+  color: var(--dark);
+  font-size: 18px;
+}
+
 .person__img {
   border: 1px solid transparent;
   border-radius: 50%;
@@ -48,6 +54,7 @@ const upperName = computed(() => props.name.toUpperCase())
 }
 
 .person__label {
+  font-family: "Koulen", sans-serif;
   display: block;
   color: var(--dark);
   margin-bottom: 12px;

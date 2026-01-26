@@ -59,6 +59,7 @@ const upperName = computed(() => props.name.toUpperCase())
   color: var(--dark);
   margin-bottom: 12px;
   font-size: 16px;
+  letter-spacing: 1px;
   line-height: 16px;
   font-weight: bold;
 }

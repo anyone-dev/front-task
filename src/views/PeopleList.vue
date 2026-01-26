@@ -2,10 +2,14 @@
 import { computed } from 'vue'
 import { store } from '@/store'
 
-const peopleWithYears = computed(() => {
+import PersonListItem from '@/components/people/PersonListItem.vue'
+
+import { hoursToYears } from '@/utils/age'
+
+const peopleWithAge = computed(() => {
   return store.people.map((person) => ({
     ...person,
-    ageInYears: Math.floor(person.ageInHours / 8760),
+    ageInYears: hoursToYears(person.ageInHours),
   }))
 })
 </script>
@@ -14,27 +18,22 @@ const peopleWithYears = computed(() => {
   <div class="flex flex-col gap-4">
     <h1 class="text-xl font-bold text-gray-700">People</h1>
 
-    <div class="flex flex-col gap-3">
-      <router-link
-        v-for="person in peopleWithYears"
+    <div v-if="peopleWithAge.length" class="flex flex-col gap-3">
+      <PersonListItem
+        v-for="person in peopleWithAge"
         :key="person.id"
-        :to="`/person/${person.id}`"
-        class="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 hover:border-violet-500"
-      >
-        <img
-          src="/img.png"
-          :alt="person.name"
-          class="w-10 h-10 rounded-full border-2 border-violet-500 object-cover"
-        />
-        <div>
-          <div class="font-bold text-gray-700">{{ person.name }}</div>
-          <div class="text-gray-600">{{ person.ageInYears }} years old</div>
-        </div>
-      </router-link>
+        :id="person.id"
+        :name="person.name"
+        :age-in-years="person.ageInYears"
+      />
     </div>
 
-    <router-link to="/settings" class="text-violet-600 hover:underline text-sm">
-      Settings
-    </router-link>
+    <p v-else class="text-gray-600">No people yet</p>
+
+    <footer class="pt-2">
+      <router-link to="/settings" class="text-violet-600 hover:underline text-sm">
+        Settings
+      </router-link>
+    </footer>
   </div>
 </template>

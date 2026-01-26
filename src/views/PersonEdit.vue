@@ -1,48 +1,58 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { store } from '@/store'
+import { NumericInput } from '@/components/NumericInput'
 
 const route = useRoute()
 
+const personId = computed(() => Number(route.params.id))
+
 const person = computed(() => {
-  const id = Number(route.params.id)
-  return store.people.find((p) => p.id === id)
+  return store.people.find((p) => p.id === personId.value)
 })
 
-function updateAge(value: string) {
-  if (person.value) {
-    person.value.ageInHours = Number(value) || 0
-  }
-}
+const isInputFocused = ref(false)
+
+const ageInHours = computed({
+  get: () => {
+    return person.value?.ageInHours ?? 0
+  },
+  set: (value: number | null) => {
+    const index = store.people.findIndex((p) => p.id === personId.value)
+    if (index !== -1) {
+      const safeValue = (value === null || value === undefined)
+        ? 0
+        : (typeof value === 'number' && !Number.isNaN(value) && isFinite(value))
+          ? value
+          : 0
+      store.people[index].ageInHours = safeValue
+    }
+  },
+})
 </script>
 
 <template>
   <div v-if="person" class="flex flex-col gap-4">
     <router-link to="/" class="text-violet-600 hover:underline text-sm">&larr; Back</router-link>
 
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-4">
       <img
         src="/img.png"
         :alt="person.name"
-        class="w-14 h-14 rounded-full border-2 border-violet-500 object-cover"
+        :class="[
+          'w-20 h-20 rounded-full object-cover',
+          isInputFocused ? 'border-2 border-violet-500' : 'border-2 border-transparent'
+        ]"
       />
-      <div>
-        <label for="hours-input" class="block text-sm font-bold tracking-wide text-gray-700">
-          {{ person.name.toUpperCase() }} IS
-        </label>
-        <div class="flex items-center gap-2">
-          <input
-            id="hours-input"
-            type="text"
-            :value="person.ageInHours"
-            @input="updateAge(($event.target as HTMLInputElement).value)"
-            class="border border-gray-300 rounded px-2 py-1 text-lg outline-none"
-            placeholder="0"
-          />
-          <span class="text-gray-600">hours old</span>
-        </div>
-      </div>
+      <NumericInput
+        v-model="ageInHours"
+        :label="`${person.name.toUpperCase()} IS`"
+        caption="hours old"
+        :min="0"
+        @focus="isInputFocused = true"
+        @blur="isInputFocused = false"
+      />
     </div>
   </div>
 

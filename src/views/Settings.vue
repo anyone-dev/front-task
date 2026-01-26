@@ -1,9 +1,20 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { store } from '@/store'
+import { NumericInput } from '@/components/NumericInput'
 
-function updateMinimumAge(value: string) {
-  store.minimumAgeInMonths = Number(value) || 0
-}
+const minimumAgeInMonths = computed({
+  get: () => store.minimumAgeInMonths,
+  set: (value: number | null) => {
+    if (value === null || value === undefined) {
+      store.minimumAgeInMonths = 0
+    } else if (typeof value === 'number' && !Number.isNaN(value) && isFinite(value)) {
+      store.minimumAgeInMonths = value
+    } else {
+      store.minimumAgeInMonths = 0
+    }
+  },
+})
 </script>
 
 <template>
@@ -12,21 +23,11 @@ function updateMinimumAge(value: string) {
 
     <h1 class="text-xl font-bold text-gray-700">Settings</h1>
 
-    <div>
-      <label for="min-age-input" class="block text-sm font-bold tracking-wide text-gray-700">
-        MINIMUM AGE
-      </label>
-      <div class="flex items-center gap-2">
-        <input
-          id="min-age-input"
-          type="text"
-          :value="store.minimumAgeInMonths"
-          @input="updateMinimumAge(($event.target as HTMLInputElement).value)"
-          class="border border-gray-300 rounded px-2 py-1 text-lg outline-none"
-          placeholder="0"
-        />
-        <span class="text-gray-600">months</span>
-      </div>
-    </div>
+    <NumericInput
+      v-model="minimumAgeInMonths"
+      label="MINIMUM AGE"
+      caption="months"
+      :min="0"
+    />
   </div>
 </template>

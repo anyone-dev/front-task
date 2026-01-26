@@ -3,10 +3,16 @@ import { computed } from 'vue'
 import { store } from '@/store'
 
 const peopleWithYears = computed(() => {
-  return store.people.map((person) => ({
-    ...person,
-    ageInYears: Math.floor(person.ageInHours / 8760),
-  }))
+  return store.people.map((person) => {
+    const hours = person.ageInHours
+    const validHours = typeof hours === 'number' && !Number.isNaN(hours) && isFinite(hours)
+      ? hours
+      : 0
+    return {
+      ...person,
+      ageInYears: Math.floor(validHours / 8760),
+    }
+  })
 })
 </script>
 
